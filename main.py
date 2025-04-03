@@ -1,16 +1,29 @@
-# This is a sample Python script.
+import time
+from tsp_solver import solve_tsp
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+def read_points(filepath):
+    points = []
+    with open(filepath, 'r') as f:
+        for line in f:
+            parts = line.strip().split()
+            if len(parts) == 3:
+                _, x, y = parts
+                points.append((float(x), float(y)))
+    return points
 
+def main():
+    filename = "points_01.txt"
+    points = read_points(filename)
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+    start_index = 1
 
+    start_time = time.perf_counter_ns()
+    path, dist = solve_tsp(points, start_index - 1)
+    end_time = time.perf_counter_ns()
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+    print("Najkrótsza trasa:", ' -> '.join(map(str, path + [path[0]])))
+    print("Długość:", round(dist, 4))
+    print(f"Czas wykonania: {end_time - start_time} ns")
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+if __name__ == "__main__":
+    main()
